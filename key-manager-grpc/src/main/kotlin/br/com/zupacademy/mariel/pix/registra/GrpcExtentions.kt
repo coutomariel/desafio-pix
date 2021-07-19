@@ -4,7 +4,7 @@ import br.com.zupacademy.mariel.ChavePixRequest
 import br.com.zupacademy.mariel.TipoChave
 import br.com.zupacademy.mariel.TipoConta
 
-fun ChavePixRequest.toEntity(): NovaChavePixDto {
+fun ChavePixRequest.toDto(): NovaChavePixDto {
 
     return NovaChavePixDto(
         idCliente = this.idCliente,

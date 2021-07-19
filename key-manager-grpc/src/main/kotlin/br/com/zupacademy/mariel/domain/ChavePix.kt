@@ -1,7 +1,5 @@
 package br.com.zupacademy.mariel.domain
 
-import br.com.zupacademy.mariel.commom.validation.ValidUUID
-import br.com.zupacademy.mariel.pix.registra.ValidPixKey
 import org.hibernate.annotations.GenericGenerator
 import org.hibernate.annotations.Type
 import java.util.*
@@ -9,16 +7,18 @@ import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
-import javax.validation.constraints.NotBlank
 
 @Entity
-@ValidPixKey
 class ChavePix(
 
-    @ValidUUID @field:NotBlank val idCliente: String,
-    @field:NotBlank val tipoChave: String,
-    @field:NotBlank val tipoConta: String,
-    @field:NotBlank val chave: String
+    @Column(nullable = false)
+    val idCliente: String,
+    @Column(nullable = false)
+    val tipoChave: String,
+    @Column(nullable = false)
+    val tipoConta: String,
+    @Column(nullable = false)
+    val chave: String
 ) {
     @Id
     @GeneratedValue(generator = "uuid2")

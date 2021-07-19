@@ -30,7 +30,7 @@ data class NovaChavePixDto(
             idCliente =  idCliente,
             tipoChave = tipoChave.toString(),
             tipoConta = tipoConta.toString(),
-            chave = if (this.tipoChave == TipoChave.CHAVE_ALEATORIA) UUID.randomUUID().toString() else this.chave
+            chave = if (tipoChave == TipoChave.CHAVE_ALEATORIA) UUID.randomUUID().toString() else chave
         )
     }
 }

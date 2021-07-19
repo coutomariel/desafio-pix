@@ -17,7 +17,7 @@ import kotlin.reflect.KClass
 @Retention(RUNTIME)
 @Constraint(validatedBy = [ValidPixKeyValidator::class])
 annotation class ValidPixKey(
-    val message: String = "Chave Pix invalida ($/{value.tipoChave})",
+    val message: String = "Chave Pix invalida",
     val groups: Array<KClass<Any>> = [],
     val payload: Array<KClass<Payload>> = [],
 )
@@ -26,11 +26,11 @@ annotation class ValidPixKey(
 class ValidPixKeyValidator : ConstraintValidator<ValidPixKey, NovaChavePixDto> {
 
     override fun isValid(
-        value: NovaChavePixDto,
-        context: ConstraintValidatorContext?
+        value: NovaChavePixDto?,
+        context: ConstraintValidatorContext
     ): Boolean {
 
-        return when (value.tipoChave) {
+        return when (value?.tipoChave) {
             TipoChave.CHAVE_ALEATORIA -> {
                 value.chave.isBlank()
             }
@@ -41,12 +41,13 @@ class ValidPixKeyValidator : ConstraintValidator<ValidPixKey, NovaChavePixDto> {
                 value.chave.matches("^\\+[1-9][0-9]\\d{1,14}\$".toRegex())
             }
             TipoChave.EMAIL -> {
-                EmailValidator().run {
-                    initialize(null)
-                    isValid(value.chave, null)
-                }
+                value.chave.matches("^([\\w\\.\\-]+)@([\\w\\-]+)((\\.(\\w){2,3})+)\$".toRegex())
+//                return EmailValidator().run {
+//                    initialize(null)
+//                    isValid(value.chave, null)
+//                }
             }
-            else -> false
+            else -> true
         }
     }
 

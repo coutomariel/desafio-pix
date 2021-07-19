@@ -14,6 +14,8 @@ import io.micronaut.aop.MethodInvocationContext
 import org.slf4j.LoggerFactory
 import javax.inject.Singleton
 import javax.validation.ConstraintViolationException
+import javax.validation.Validation
+import javax.validation.ValidationException
 
 @Singleton
 @InterceptorBean(ErrorHandler::class) // supported from Micronaut 2.4 onwards (https://docs.micronaut.io/2.4.0/guide/index.html#aop)
@@ -39,6 +41,7 @@ class ExceptionHandlerInterceptor : MethodInterceptor<CadastroNovaChavePixEndPoi
                 is IllegalArgumentException -> Status.INVALID_ARGUMENT.withDescription(e.message).asRuntimeException()
                 is IllegalStateException -> Status.FAILED_PRECONDITION.withDescription(e.message).asRuntimeException()
                 is ConstraintViolationException -> handleConstraintValidationException(e)
+                is ValidationException -> Status.INVALID_ARGUMENT.withDescription(e.message).asRuntimeException()
                 is ChavePixExistenteException -> Status.ALREADY_EXISTS.withDescription(e.message).asRuntimeException()
                 else -> Status.UNKNOWN.withDescription("unexpected error happened").asRuntimeException()
             }
@@ -61,7 +64,7 @@ class ExceptionHandlerInterceptor : MethodInterceptor<CadastroNovaChavePixEndPoi
 
         val statusProto = com.google.rpc.Status.newBuilder()
             .setCode(Code.INVALID_ARGUMENT_VALUE)
-            .setMessage("request with invalid parameters")
+            .setMessage("Dados de entrada invalidos")
             .addDetails(com.google.protobuf.Any.pack(badRequest)) // com.google.protobuf.Any
             .build()
 

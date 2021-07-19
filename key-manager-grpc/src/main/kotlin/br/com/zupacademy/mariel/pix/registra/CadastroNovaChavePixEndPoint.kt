@@ -18,7 +18,7 @@ class CadastroNovaChavePixEndPoint(
 
     override fun cadastrar(request: ChavePixRequest, responseObserver: StreamObserver<ChavePixResponse>?) {
 
-        val registeredPix = service.registra(request.toEntity())
+        val registeredPix = service.registra(request.toDto())
 
         responseObserver?.onNext(ChavePixResponse.newBuilder().setPixId(registeredPix).build())
         responseObserver?.onCompleted()
