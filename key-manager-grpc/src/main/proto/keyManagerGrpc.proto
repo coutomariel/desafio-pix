@@ -36,4 +36,5 @@ message ChavePixRequest {
 
 message ChavePixResponse {
   string pixId = 1;
+  string chave = 2;
 }

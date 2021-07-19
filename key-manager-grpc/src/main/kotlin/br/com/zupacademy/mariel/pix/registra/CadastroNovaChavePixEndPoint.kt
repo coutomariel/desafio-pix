@@ -20,7 +20,10 @@ class CadastroNovaChavePixEndPoint(
 
         val registeredPix = service.registra(request.toDto())
 
-        responseObserver?.onNext(ChavePixResponse.newBuilder().setPixId(registeredPix).build())
+        responseObserver?.onNext(ChavePixResponse.newBuilder()
+            .setPixId(registeredPix?.id.toString())
+            .setChave(registeredPix?.chave)
+            .build())
         responseObserver?.onCompleted()
 
     }

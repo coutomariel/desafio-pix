@@ -39,10 +39,10 @@ internal class CadastroNovaChavePixEndPointTest(
 
         with(chavePixResponse) {
             assertNotNull(this.pixId)
-            assertTrue(repository.existsByChave(this.pixId))
+            assertTrue(repository.existsByChave(this.chave))
         }
 
-        val chavePixInDatabase = repository.findByChave(chavePixResponse.pixId)
+        val chavePixInDatabase = repository.findByChave(chavePixResponse.chave)
         with(chavePixInDatabase) {
             assertEquals(chavePixToSave.tipoChave.toString(), tipoChave)
             assertEquals(chavePixToSave.tipoConta.toString(), tipoConta)
@@ -61,10 +61,10 @@ internal class CadastroNovaChavePixEndPointTest(
 
         with(chavePixResponse) {
             assertNotNull(this.pixId)
-            assertTrue(repository.existsByChave(this.pixId))
+            assertTrue(repository.existsByChave(this.chave))
         }
 
-        val chavePixInDatabase = repository.findByChave(chavePixResponse.pixId)
+        val chavePixInDatabase = repository.findByChave(chavePixResponse.chave)
         with(chavePixInDatabase) {
             assertEquals(chavePixToSave.tipoChave.toString(), tipoChave)
             assertEquals(chavePixToSave.tipoConta.toString(), tipoConta)
@@ -83,10 +83,10 @@ internal class CadastroNovaChavePixEndPointTest(
 
         with(chavePixResponse) {
             assertNotNull(this.pixId)
-            assertTrue(repository.existsByChave(this.pixId))
+            assertTrue(repository.existsByChave(this.chave))
         }
 
-        val chavePixInDatabase = repository.findByChave(chavePixResponse.pixId)
+        val chavePixInDatabase = repository.findByChave(chavePixResponse.chave)
         with(chavePixInDatabase) {
             assertEquals(chavePixToSave.tipoChave.toString(), tipoChave)
             assertEquals(chavePixToSave.tipoConta.toString(), tipoConta)
@@ -185,7 +185,7 @@ internal class CadastroNovaChavePixEndPointTest(
     @Test
     fun `deve gerar uma chave randomica quando tipo for aleatoria`() {
         val mockChavePixRequestToInsert = MockChavePixRequestToInsert(tipoChave = TipoChave.CHAVE_ALEATORIA, chave = "")
-        val chavePixResponse = grpcClient.cadastrar(mockChavePixRequestToInsert).pixId
+        val chavePixResponse = grpcClient.cadastrar(mockChavePixRequestToInsert).chave
 
         val registeredPix = repository.findByChave(chavePixResponse)
 
