@@ -1,14 +1,12 @@
 package br.com.zupacademy.mariel.pix.registra
 
-import br.com.zupacademy.mariel.ChavePixRequest
-import br.com.zupacademy.mariel.KeyManagerGrpcServiceGrpc
-import br.com.zupacademy.mariel.TipoChave
-import br.com.zupacademy.mariel.TipoConta
+import br.com.zupacademy.mariel.*
 import br.com.zupacademy.mariel.domain.ChavePix
 import br.com.zupacademy.mariel.domain.ChavePixRepository
 import io.grpc.ManagedChannel
 import io.grpc.Status
 import io.grpc.StatusRuntimeException
+import io.micronaut.context.annotation.Bean
 import io.micronaut.context.annotation.Factory
 import io.micronaut.grpc.annotation.GrpcChannel
 import io.micronaut.grpc.server.GrpcServerChannel
@@ -17,13 +15,13 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import javax.inject.Singleton
+import java.util.*
 
 
 @MicronautTest(transactional = false)
 internal class CadastroNovaChavePixEndPointTest(
-    val repository: ChavePixRepository,
-    val grpcClient: KeyManagerGrpcServiceGrpc.KeyManagerGrpcServiceBlockingStub,
+    private val repository: ChavePixRepository,
+    private val grpcClient: KeyManagerRegisterGrpcServiceGrpc.KeyManagerRegisterGrpcServiceBlockingStub,
 ) {
 
     @BeforeEach
@@ -34,15 +32,15 @@ internal class CadastroNovaChavePixEndPointTest(
     @Test
     fun `deve registrar uma nova chave pix a partir de um cpf valido`() {
 
-        val chavePixToSave = MockChavePixRequestToInsert(tipoChave = TipoChave.CPF, chave = "82564475590" )
+        val chavePixToSave = MockChavePixRequestToInsert(tipoChave = TipoChave.CPF, chave = "82564475590")
         val chavePixResponse = grpcClient.cadastrar(chavePixToSave)
 
         with(chavePixResponse) {
             assertNotNull(this.pixId)
-            assertTrue(repository.existsByChave(this.chave))
+            assertTrue(repository.existsById(UUID.fromString(this.pixId)))
         }
 
-        val chavePixInDatabase = repository.findByChave(chavePixResponse.chave)
+        val chavePixInDatabase = repository.findById(UUID.fromString(chavePixResponse.pixId)).get()
         with(chavePixInDatabase) {
             assertEquals(chavePixToSave.tipoChave.toString(), tipoChave)
             assertEquals(chavePixToSave.tipoConta.toString(), tipoConta)
@@ -55,16 +53,18 @@ internal class CadastroNovaChavePixEndPointTest(
     @Test
     fun `deve registrar uma nova chave pix a partir de um celular valido`() {
 
-        val chavePixToSave = MockChavePixRequestToInsert(tipoChave = TipoChave.TELEFONE_CELULAR,
-            chave = "+5585988714077" )
+        val chavePixToSave = MockChavePixRequestToInsert(
+            tipoChave = TipoChave.TELEFONE_CELULAR,
+            chave = "+5585988714077"
+        )
         val chavePixResponse = grpcClient.cadastrar(chavePixToSave)
 
         with(chavePixResponse) {
             assertNotNull(this.pixId)
-            assertTrue(repository.existsByChave(this.chave))
+            assertTrue(repository.existsById(UUID.fromString(this.pixId)))
         }
 
-        val chavePixInDatabase = repository.findByChave(chavePixResponse.chave)
+        val chavePixInDatabase = repository.findById(UUID.fromString(chavePixResponse.pixId)).get()
         with(chavePixInDatabase) {
             assertEquals(chavePixToSave.tipoChave.toString(), tipoChave)
             assertEquals(chavePixToSave.tipoConta.toString(), tipoConta)
@@ -77,16 +77,18 @@ internal class CadastroNovaChavePixEndPointTest(
     @Test
     fun `deve registrar uma nova chave pix a partir de um email valido`() {
 
-        val chavePixToSave = MockChavePixRequestToInsert(tipoChave = TipoChave.EMAIL,
-            chave = "emailquentucho@gmail.com" )
+        val chavePixToSave = MockChavePixRequestToInsert(
+            tipoChave = TipoChave.EMAIL,
+            chave = "emailquentucho@gmail.com"
+        )
         val chavePixResponse = grpcClient.cadastrar(chavePixToSave)
 
         with(chavePixResponse) {
             assertNotNull(this.pixId)
-            assertTrue(repository.existsByChave(this.chave))
+            assertTrue(repository.existsById(UUID.fromString(this.pixId)))
         }
 
-        val chavePixInDatabase = repository.findByChave(chavePixResponse.chave)
+        val chavePixInDatabase = repository.findById(UUID.fromString(chavePixResponse.pixId)).get()
         with(chavePixInDatabase) {
             assertEquals(chavePixToSave.tipoChave.toString(), tipoChave)
             assertEquals(chavePixToSave.tipoConta.toString(), tipoConta)
@@ -97,7 +99,7 @@ internal class CadastroNovaChavePixEndPointTest(
     }
 
     @Test
-    fun `nao deve adicionar uma chave já existente`() {
+    fun `nao deve adicionar uma chave ja existente`() {
         val existente = repository.save(MockChavePixEntityToInsert())
 
         val error = assertThrows<StatusRuntimeException> {
@@ -185,12 +187,12 @@ internal class CadastroNovaChavePixEndPointTest(
     @Test
     fun `deve gerar uma chave randomica quando tipo for aleatoria`() {
         val mockChavePixRequestToInsert = MockChavePixRequestToInsert(tipoChave = TipoChave.CHAVE_ALEATORIA, chave = "")
-        val chavePixResponse = grpcClient.cadastrar(mockChavePixRequestToInsert).chave
+        val chavePixResponse = grpcClient.cadastrar(mockChavePixRequestToInsert)
 
-        val registeredPix = repository.findByChave(chavePixResponse)
+        val registeredPix = repository.findById(UUID.fromString(chavePixResponse.pixId)).get()
 
         with(registeredPix) {
-            assertTrue(chave.matches("^[0-9a-f]{8}\\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\\b[0-9a-f]{12}$".toRegex()))
+            assertTrue(id.toString().matches("^[0-9a-f]{8}\\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\\b[0-9a-f]{12}$".toRegex()))
         }
 
     }
@@ -223,7 +225,12 @@ internal class CadastroNovaChavePixEndPointTest(
     fun `nao deve registrar nova chave quando tipo da chave for telefone celular e o numero for invalido`() {
 
         val error = assertThrows<StatusRuntimeException> {
-            grpcClient.cadastrar(MockChavePixRequestToInsert(tipoChave = TipoChave.TELEFONE_CELULAR, chave = "36322222"))
+            grpcClient.cadastrar(
+                MockChavePixRequestToInsert(
+                    tipoChave = TipoChave.TELEFONE_CELULAR,
+                    chave = "36322222"
+                )
+            )
         }
 
         with(error) {
@@ -255,10 +262,10 @@ internal class CadastroNovaChavePixEndPointTest(
     }
 
     @Factory
-    class Clients {
-        @Singleton
-        fun blockingStub(@GrpcChannel(GrpcServerChannel.NAME) channel: ManagedChannel): KeyManagerGrpcServiceGrpc.KeyManagerGrpcServiceBlockingStub {
-            return KeyManagerGrpcServiceGrpc.newBlockingStub(channel)
+    private class Clients {
+        @Bean
+        fun blockingStub(@GrpcChannel(GrpcServerChannel.NAME) channel: ManagedChannel): KeyManagerRegisterGrpcServiceGrpc.KeyManagerRegisterGrpcServiceBlockingStub {
+            return KeyManagerRegisterGrpcServiceGrpc.newBlockingStub(channel)
         }
     }
 

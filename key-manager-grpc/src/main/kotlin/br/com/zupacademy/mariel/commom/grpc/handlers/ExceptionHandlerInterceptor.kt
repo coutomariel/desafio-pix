@@ -2,6 +2,7 @@ package br.com.zupacademy.mariel.commom.grpc.handlers
 
 import br.com.zupacademy.mariel.pix.registra.CadastroNovaChavePixEndPoint
 import br.com.zupacademy.mariel.pix.registra.ChavePixExistenteException
+import br.com.zupacademy.mariel.pix.remove.ChavePixNaoEncontradaException
 import com.google.rpc.BadRequest
 import com.google.rpc.Code
 import io.grpc.Status
@@ -43,6 +44,7 @@ class ExceptionHandlerInterceptor : MethodInterceptor<CadastroNovaChavePixEndPoi
                 is ConstraintViolationException -> handleConstraintValidationException(e)
                 is ValidationException -> Status.INVALID_ARGUMENT.withDescription(e.message).asRuntimeException()
                 is ChavePixExistenteException -> Status.ALREADY_EXISTS.withDescription(e.message).asRuntimeException()
+                is ChavePixNaoEncontradaException -> Status.NOT_FOUND.withDescription(e.message).asRuntimeException()
                 else -> Status.UNKNOWN.withDescription("unexpected error happened").asRuntimeException()
             }
 

@@ -4,7 +4,7 @@ micronaut:
 
 datasources:
   default:
-    url: jdbc:mysql://localhost:3306/pix_db
+    url: jdbc:mysql://localhost:3306/pix_db?createDatabaseIfNotExist=true&serverTimeZone=UTC
     driverClassName: com.mysql.cj.jdbc.Driver
     username: root
     password: root

@@ -7,8 +7,12 @@ option objc_class_prefix = "HLW";
 
 package br.com.zupacademy.mariel;
 
-service KeyManagerGrpcService {
+service KeyManagerRegisterGrpcService {
   rpc cadastrar (ChavePixRequest) returns (ChavePixResponse) {}
+}
+
+service KeyManagerRemoveGrpcService {
+  rpc remover (ChavePixToRemoveRequest) returns (ChavePixToRemoveResponse) {}
 }
 
 enum TipoChave {
@@ -26,15 +30,22 @@ enum TipoConta {
 }
 
 message ChavePixRequest {
-  string id = 1;
-  string chave = 2;
-  string idCliente = 3;
-  TipoChave tipoChave = 4;
-  TipoConta tipoConta = 5;
-
+  string chave = 1;
+  string idCliente = 2;
+  TipoChave tipoChave = 3;
+  TipoConta tipoConta = 4;
 }
 
 message ChavePixResponse {
   string pixId = 1;
-  string chave = 2;
+  string idCliente = 2;
+}
+
+message ChavePixToRemoveRequest {
+  string pixId = 1;
+  string idCliente = 2;
+}
+
+message ChavePixToRemoveResponse {
+  string message = 1;
 }
