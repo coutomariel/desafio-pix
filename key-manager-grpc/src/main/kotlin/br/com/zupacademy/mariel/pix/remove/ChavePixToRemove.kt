@@ -5,7 +5,7 @@ import io.micronaut.core.annotation.Introspected
 import javax.validation.constraints.NotBlank
 
 @Introspected
-data class ChavePixToRemoveDto(
+data class ChavePixToRemove(
     @ValidUUID  @field:NotBlank val pixId: String = "",
     @field:NotBlank val idCliente: String = ""
 )

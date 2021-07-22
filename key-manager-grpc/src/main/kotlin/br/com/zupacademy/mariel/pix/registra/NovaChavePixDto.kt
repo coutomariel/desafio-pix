@@ -46,7 +46,7 @@ data class NovaChavePixDto(
             keyType = tipoChave!!,
             key = chave,
             bankAccount = BanckAccount(
-                participant = detalhesDaConta.titular.nome,
+                participant = BanckAccount.getParticipant(),
                 accountNumber = detalhesDaConta.numero
             ),
             owner = br.com.zupacademy.mariel.pix.integracao.bacen.Owner(

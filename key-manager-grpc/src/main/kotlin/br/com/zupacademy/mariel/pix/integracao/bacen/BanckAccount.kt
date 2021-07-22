@@ -5,4 +5,10 @@ data class BanckAccount(
     val branch: String = "0001",
     val accountNumber : String,
     val accountType: String = "CACC",
-)
+) {
+    companion object {
+        fun getParticipant() : String {
+            return "60701190"
+        }
+    }
+}
