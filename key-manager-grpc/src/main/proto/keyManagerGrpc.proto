@@ -25,8 +25,8 @@ enum TipoChave {
 
 enum TipoConta {
   UNKNOWN_ACCOUNT = 0;
-  CORRENTE = 1;
-  POUPANCA = 2;
+  CONTA_CORRENTE = 1;
+  CONTA_POUPANCA = 2;
 }
 
 message ChavePixRequest {
