@@ -18,7 +18,9 @@ class ChavePix(
     @Column(nullable = false)
     val tipoConta: String,
     @Column(nullable = false)
-    val chave: String
+    val chave: String,
+    val contaAssociada: ContaAssociada,
+    val owner: Owner
 ) {
     @Id
     @GeneratedValue(generator = "uuid2")
