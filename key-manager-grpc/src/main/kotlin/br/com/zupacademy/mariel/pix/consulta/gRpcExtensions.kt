@@ -8,6 +8,7 @@ import br.com.zupacademy.mariel.domain.ChavePix
 import br.com.zupacademy.mariel.pix.integracao.bacen.BanckAccount
 import br.com.zupacademy.mariel.pix.integracao.bacen.ChavePixByChaveBacenResponse
 import br.com.zupacademy.mariel.pix.integracao.bacen.TipoContaBacen
+import com.google.protobuf.Timestamp
 
 fun ChavePixToSearchRequest.getSearchType(): TipoPesquisa {
     return if (chave.isNullOrBlank()) {
@@ -25,7 +26,7 @@ fun ChavePix.toChavePixDetailsResponse(): ChavePixDetailsResponse? {
                 .newBuilder()
                 .setTipo(TipoChave.valueOf(tipoChave))
                 .setChave(chave)
-                //.setCriadaEm()
+                .setCriadaEm(Timestamp.newBuilder().setSeconds(criadaEm.second.toLong()).setNanos(criadaEm.nano).build())
                 .setConta(
                     ChavePixDetailsResponse.ChavePix.ContaInfo
                         .newBuilder()
@@ -52,7 +53,7 @@ fun ChavePixByChaveBacenResponse.toChavePixDetailsResponse(): ChavePixDetailsRes
                 .newBuilder()
                 .setTipo(TipoChave.valueOf(keyType.toString()))
                 .setChave(key)
-                //.setCriadaEm()
+                .setCriadaEm(Timestamp.newBuilder().setSeconds(createdAt.second.toLong()).setNanos(createdAt.nano).build())
                 .setConta(
                     ChavePixDetailsResponse.ChavePix.ContaInfo
                         .newBuilder()

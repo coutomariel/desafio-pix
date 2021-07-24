@@ -2,6 +2,7 @@ package br.com.zupacademy.mariel.domain
 
 import org.hibernate.annotations.GenericGenerator
 import org.hibernate.annotations.Type
+import java.time.LocalDateTime
 import java.util.*
 import javax.persistence.Column
 import javax.persistence.Entity
@@ -20,7 +21,8 @@ class ChavePix(
     @Column(nullable = false)
     val chave: String,
     val contaAssociada: ContaAssociada,
-    val owner: Owner
+    val owner: Owner,
+    val criadaEm : LocalDateTime = LocalDateTime.now()
 ) {
     @Id
     @GeneratedValue(generator = "uuid2")
