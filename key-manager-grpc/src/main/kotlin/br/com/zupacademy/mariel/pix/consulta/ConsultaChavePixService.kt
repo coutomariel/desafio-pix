@@ -27,17 +27,17 @@ class ConsultaChavePixService(
     }
 
     fun getPixByChave(filtro: ChavePixToSearchRequest): ChavePixDetailsResponse? {
-        if(!repository.existsByChave(filtro.chave)){
 
-            val bacenRequest = bacenClient.consulta(filtro.chave)
-            if (bacenRequest.status.code != 200) {
-                throw ChavePixNaoEncontradaException("Chave pix nao encotrada com os parametros informados")
-            }
-            val bacenResponse: ChavePixByChaveBacenResponse = bacenRequest.body()
-            return bacenResponse.toChavePixDetailsResponse()
-
+        if(repository.existsByChave(filtro.chave)){
+            return repository.findByChave(filtro.chave).get().toChavePixDetailsResponse()
         }
-        return repository.findByChave(filtro.chave).get().toChavePixDetailsResponse()
+
+        val bacenRequest = bacenClient.consulta(filtro.chave)
+        if (bacenRequest.status.code != 200) {
+            throw ChavePixNaoEncontradaException("Chave pix nao encotrada com os parametros informados")
+        }
+        val bacenResponse: ChavePixByChaveBacenResponse = bacenRequest.body()
+        return bacenResponse.toChavePixDetailsResponse()
     }
 
     fun getPixByPixId(filtro: ChavePixToSearchRequest) : ChavePixDetailsResponse? {

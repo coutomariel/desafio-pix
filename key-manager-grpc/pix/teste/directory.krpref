@@ -1,0 +1,17 @@
+{
+  "settings": [
+    {
+      "options": {
+        "grpc": {
+          "mode": "grpc",
+          "metadata": [
+            {
+              "key": "",
+              "value": ""
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
