@@ -10,5 +10,10 @@ data class BanckAccount(
         fun getParticipant() : String {
             return "60701190"
         }
+
+        fun getBranch(): String {
+            return "001"
+        }
+
     }
 }

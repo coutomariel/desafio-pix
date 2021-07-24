@@ -17,4 +17,8 @@ interface BacenClient {
     @Produces(MediaType.APPLICATION_XML)
     @Consumes(MediaType.APPLICATION_XML)
     fun remove(@Body toRemove: ChavePixToRemoveBacenRequest, key: String): HttpResponse<ChavePixToRemoveBacenResponse>
+
+    @Get("/{key}")
+    @Consumes(MediaType.APPLICATION_XML)
+    fun consulta(key : String) : HttpResponse<ChavePixByChaveBacenResponse>
 }
