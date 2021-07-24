@@ -1,9 +1,6 @@
 package br.com.zupacademy.mariel.pix.consulta
 
-import br.com.zupacademy.mariel.ChavePixToSearchRequest
-import br.com.zupacademy.mariel.KeyManagerConsultaChavePixGrpcServiceGrpc
-import br.com.zupacademy.mariel.TipoChave
-import br.com.zupacademy.mariel.TipoConta
+import br.com.zupacademy.mariel.*
 import br.com.zupacademy.mariel.domain.ChavePix
 import br.com.zupacademy.mariel.domain.ChavePixRepository
 import br.com.zupacademy.mariel.domain.ContaAssociada

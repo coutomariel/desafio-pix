@@ -106,3 +106,28 @@ message ChavePixDetailsResponse {
   ChavePix chavePix = 3;
 
 }
+
+
+/**
+ SERVIÇO PARA LISTAR AS CHAVES DE UM CLIENTE
+*/
+
+service KeyManagerListaChavesDeUmClienteGrpcService {
+  rpc lista (ChavesDeUmClienteRequest) returns (ChavesDeUmClienteResponse) {}
+}
+
+message ChavesDeUmClienteRequest {
+  string clientId = 1;
+}
+
+message ChavesDeUmClienteResponse {
+  message Chave {
+    string pixId = 1;
+    string tipo = 2;
+    string chave = 3;
+    string tipoConta = 4;
+    google.protobuf.Timestamp criadoEm = 5;
+  }
+  string clientId = 1;
+  repeated Chave chaves = 2;
+}
