@@ -1,6 +1,7 @@
 package br.com.zupacademy.mariel.pix.commom.grpc
 
 import br.com.zupacademy.mariel.KeyManagerConsultaChavePixGrpcServiceGrpc
+import br.com.zupacademy.mariel.KeyManagerListaChavesDeUmClienteGrpcServiceGrpc
 import br.com.zupacademy.mariel.KeyManagerRegisterGrpcServiceGrpc
 import br.com.zupacademy.mariel.KeyManagerRemoveGrpcServiceGrpc
 import io.grpc.ManagedChannel
@@ -21,4 +22,7 @@ class KeyManagerGrpcFactory(
 
     @Singleton
     fun consultaChave() = KeyManagerConsultaChavePixGrpcServiceGrpc.newBlockingStub(channel)
+
+    @Singleton
+    fun listaChaves() = KeyManagerListaChavesDeUmClienteGrpcServiceGrpc.newBlockingStub(channel)
 }
