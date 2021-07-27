@@ -1,0 +1,133 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "br.com.zupacademy.mariel";
+option java_outer_classname = "KeyManagerGrpc";
+option objc_class_prefix = "HLW";
+
+package br.com.zupacademy.mariel;
+
+import "google/protobuf/timestamp.proto";
+
+
+/**
+  SERVIÇO PARA REGISTRO DE UMA CHAVE PIX
+ */
+service KeyManagerRegisterGrpcService {
+  rpc cadastrar (ChavePixRequest) returns (ChavePixResponse) {}
+}
+
+message ChavePixRequest {
+  string chave = 1;
+  string idCliente = 2;
+  TipoChave tipoChave = 3;
+  TipoConta tipoConta = 4;
+}
+
+message ChavePixResponse {
+  string pixId = 1;
+  string idCliente = 2;
+}
+
+
+enum TipoChave {
+  UNKNOWN_KEY_TYPE = 0;
+  CHAVE_ALEATORIA = 1;
+  TELEFONE_CELULAR = 2;
+  EMAIL = 3;
+  CPF = 4;
+}
+
+enum TipoConta {
+  UNKNOWN_ACCOUNT = 0;
+  CONTA_CORRENTE = 1;
+  CONTA_POUPANCA = 2;
+}
+
+/**
+  SERVIÇO PARA EXCLUSÃO DE UMA CHAVE PIX
+ */
+
+service KeyManagerRemoveGrpcService {
+  rpc remover (ChavePixToRemoveRequest) returns (ChavePixToRemoveResponse) {}
+}
+
+message ChavePixToRemoveRequest {
+  string pixId = 1;
+  string idCliente = 2;
+}
+
+message ChavePixToRemoveResponse {
+  string message = 1;
+}
+
+
+
+/**
+   SERVIÇO PARA CONSULTA DE UMA CHAVE PIX
+ */
+
+service KeyManagerConsultaChavePixGrpcService {
+  rpc consulta (ChavePixToSearchRequest) returns (ChavePixDetailsResponse) {}
+}
+
+message ChavePixToSearchRequest {
+  message Filtro {
+    string idCliente = 1;
+    string pixId = 2;
+  }
+
+  oneof filtro {
+    Filtro filtroPorPixId = 1;
+    string chave = 2 ;
+  }
+}
+
+message ChavePixDetailsResponse {
+
+  message ChavePix {
+    message ContaInfo {
+      TipoConta tipo = 1;
+      string instituicao = 2;
+      string nomeDoTitular = 3;
+      string cpfDoTitular = 4;
+      string agencia = 5;
+      string numeroDeConta = 6;
+    }
+
+    TipoChave tipo = 1;
+    string chave = 2;
+    ContaInfo conta = 3;
+    google.protobuf.Timestamp CriadaEm = 4;
+  }
+
+  string clientId = 1;
+  string pixId = 2;
+  ChavePix chavePix = 3;
+
+}
+
+
+/**
+ SERVIÇO PARA LISTAR AS CHAVES DE UM CLIENTE
+*/
+
+service KeyManagerListaChavesDeUmClienteGrpcService {
+  rpc lista (ChavesDeUmClienteRequest) returns (ChavesDeUmClienteResponse) {}
+}
+
+message ChavesDeUmClienteRequest {
+  string clientId = 1;
+}
+
+message ChavesDeUmClienteResponse {
+  message Chave {
+    string pixId = 1;
+    string tipo = 2;
+    string chave = 3;
+    string tipoConta = 4;
+    google.protobuf.Timestamp criadoEm = 5;
+  }
+  string clientId = 1;
+  repeated Chave chaves = 2;
+}
