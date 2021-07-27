@@ -1,6 +1,7 @@
 package br.com.zupacademy.mariel.pix.commom.grpc
 
 import br.com.zupacademy.mariel.KeyManagerRegisterGrpcServiceGrpc
+import br.com.zupacademy.mariel.KeyManagerRemoveGrpcServiceGrpc
 import io.grpc.ManagedChannel
 import io.micronaut.context.annotation.Factory
 import io.micronaut.grpc.annotation.GrpcChannel
@@ -13,4 +14,7 @@ class KeyManagerGrpcFactory(
 
     @Singleton
     fun registraChave() = KeyManagerRegisterGrpcServiceGrpc.newBlockingStub(channel)
+
+    @Singleton
+    fun removeChave() = KeyManagerRemoveGrpcServiceGrpc.newBlockingStub(channel)
 }
